@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hurricane Solution — Protección Contra Huracanes en México</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Lato:wght@300;400;700;900&display=swap" rel="stylesheet">
+<style>
+:root{--black:#0a0a0a;--white:#ffffff;--offwhite:#f8f7f5;--gray-900:#111111;--gray-800:#1c1c1c;--gray-700:#2a2a2a;--gray-600:#404040;--gray-500:#6b7280;--gray-400:#9ca3af;--gray-300:#9ca3af;--gray-200:#e5e7eb;--gray-100:#f3f4f6;--accent:#24b7db;--font-display:'Bebas Neue',sans-serif;--font-body:'Lato',sans-serif}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--white);color:var(--black);font-family:var(--font-body);font-size:16px;line-height:1.6;overflow-x:hidden}
+::-webkit-scrollbar{width:3px}::-webkit-scrollbar-track{background:var(--gray-100)}::-webkit-scrollbar-thumb{background:var(--gray-300)}
+/* TOPBAR */
+.topbar{background:var(--gray-900);padding:8px 48px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.topbar-left{display:flex;align-items:center;gap:16px}
+.topbar-tel{font-size:12px;color:var(--gray-300);text-decoration:none;letter-spacing:.04em;display:flex;align-items:center;gap:6px;transition:color .2s}
+.topbar-tel:hover{color:var(--white)}
+.topbar-wa{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;background:#25D366;color:#fff;padding:4px 12px;text-decoration:none;border-radius:2px}
+.topbar-right{display:flex;align-items:center;gap:16px}
+.topbar-right a{font-size:11px;color:var(--gray-500);text-decoration:none;letter-spacing:.08em;text-transform:uppercase;transition:color .2s}
+.topbar-right a:hover{color:var(--white)}
+.lang-btn{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--gray-500);background:none;border:1px solid var(--gray-700);padding:2px 8px;cursor:pointer}
+/* NAV */
+nav{position:sticky;top:0;z-index:200;background:var(--black);border-bottom:1px solid var(--gray-800);padding:0 48px;display:flex;align-items:center;justify-content:space-between;height:64px;gap:32px;transition:box-shadow .3s}
+nav.scrolled{box-shadow:0 2px 20px rgba(0,0,0,.5)}
+.nav-logo a{font-family:var(--font-display);font-size:20px;letter-spacing:.06em;text-decoration:none}
+.nav-logo a .logo-h{color:var(--white)}
+.nav-logo a .logo-s{color:var(--gray-500)}
+.nav-links{display:flex;align-items:center;gap:0;flex:1;justify-content:center;list-style:none}
+.nav-links a{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--gray-300);text-decoration:none;padding:0 14px;height:64px;display:flex;align-items:center;border-bottom:2px solid transparent;transition:color .2s,border-color .2s}
+.nav-links a:hover,.nav-links a.active{color:var(--white);border-bottom-color:var(--accent)}
+.nav-links a.nav-ag{color:var(--accent)}
+.nav-cta{background:var(--white)!important;color:var(--black)!important;font-size:11px!important;font-weight:700!important;letter-spacing:.1em!important;text-transform:uppercase!important;padding:10px 20px!important;text-decoration:none!important;white-space:nowrap!important;flex-shrink:0!important;border-bottom:none!important;transition:background .2s!important}
+.nav-cta:hover{background:var(--gray-200)!important}
+/* HAMBURGER */
+.nav-burger{display:none;flex-direction:column;justify-content:center;align-items:center;gap:5px;width:40px;height:40px;background:none;border:1px solid var(--gray-700);cursor:pointer;padding:8px;flex-shrink:0}
+.nav-burger span{display:block;width:18px;height:1.5px;background:var(--white);transition:transform .25s,opacity .25s;transform-origin:center}
+.nav-burger.is-active span:nth-child(1){transform:translateY(6.5px) rotate(45deg)}
+.nav-burger.is-active span:nth-child(2){opacity:0}
+.nav-burger.is-active span:nth-child(3){transform:translateY(-6.5px) rotate(-45deg)}
+.nav-drawer{position:fixed;top:0;right:-100%;width:min(320px,85vw);height:100vh;background:var(--gray-900);border-left:1px solid var(--gray-800);z-index:300;transition:right .3s ease;padding:72px 0 40px;overflow-y:auto}
+.nav-drawer.is-open{right:0}
+.nav-drawer-overlay{position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:299;opacity:0;pointer-events:none;transition:opacity .3s}
+.nav-drawer-overlay.is-show{opacity:1;pointer-events:all}
+.nav-drawer-list{list-style:none;display:flex;flex-direction:column}
+.nav-drawer-list a{display:block;padding:15px 28px;font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--gray-300);text-decoration:none;border-bottom:1px solid var(--gray-800);transition:color .2s,background .2s}
+.nav-drawer-list a:hover,.nav-drawer-list a.active{color:var(--white);background:rgba(255,255,255,.04)}
+.nav-drawer-list a.nav-ag{color:var(--accent)}
+.nav-drawer-cta{display:block;margin:20px 28px 0;text-align:center;font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;background:var(--white);color:var(--black);padding:13px;text-decoration:none}
+/* SECTIONS */
+.section-wrap{padding:100px 48px}
+.section-label{font-size:10px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--gray-500);margin-bottom:16px;display:flex;align-items:center;gap:10px}
+.section-label::before{content:'';display:block;width:24px;height:1px;background:var(--gray-500)}
+.section-title{font-family:var(--font-display);font-size:clamp(36px,4vw,60px);line-height:1;letter-spacing:.02em;margin-bottom:16px}
+.section-body{font-size:15px;font-weight:300;color:var(--gray-500);line-height:1.75;max-width:520px}
+/* TRUST BAR */
+#trust-bar{background:var(--offwhite);border-bottom:1px solid var(--gray-200);padding:0 48px;overflow:hidden}
+.trust-inner{display:flex;align-items:stretch}
+.trust-badge{flex:1;display:flex;align-items:center;gap:12px;padding:22px 24px;border-right:1px solid var(--gray-200)}
+.trust-badge:last-child{border-right:none}
+.trust-badge-icon{width:32px;height:32px;background:var(--black);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:14px;color:var(--white)}
+.trust-badge-title{font-size:11px;font-weight:700;letter-spacing:.06em;color:var(--black);line-height:1.3}
+.trust-badge-sub{font-size:10px;color:var(--gray-500);letter-spacing:.03em}
+/* WHY US */
+.why-header{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:end;margin-bottom:64px}
+.why-grid{display:grid;grid-template-columns:1fr 1fr;gap:2px}
+.why-card{background:var(--offwhite);border:1px solid var(--gray-200);padding:48px 40px;transition:border-color .3s,background .3s}
+.why-card:hover{border-color:var(--black);background:var(--white)}
+.why-num{font-family:var(--font-display);font-size:13px;letter-spacing:.15em;color:var(--gray-300);margin-bottom:20px}
+.why-title{font-family:var(--font-display);font-size:28px;letter-spacing:.03em;color:var(--black);line-height:1.1;margin-bottom:16px}
+.why-body{font-size:13px;font-weight:300;color:var(--gray-500);line-height:1.7}
+/* STATS BAND */
+#stats-band{background:var(--black);padding:80px 48px 0;overflow:hidden}
+.stats-band-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border:1px solid var(--gray-800);border-bottom:none}
+.band-stat{padding:48px 40px;border-right:1px solid var(--gray-800);text-align:center}
+.band-stat:last-child{border-right:none}
+.band-stat-num{font-family:var(--font-display);font-size:clamp(60px,7vw,96px);line-height:1;color:var(--white)}
+.band-stat-num sup{font-size:.45em;color:var(--accent)}
+.band-stat-label{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--gray-500);margin-top:8px}
+.ticker-wrap{border-top:1px solid var(--gray-800);border-left:1px solid var(--gray-800);border-right:1px solid var(--gray-800);padding:16px 0;overflow:hidden;white-space:nowrap}
+.ticker-track{display:inline-flex;animation:ticker 28s linear infinite}
+.ticker-item{display:inline-flex;align-items:center;gap:8px;padding:0 32px;font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--gray-600)}
+.ticker-item .dot{width:4px;height:4px;border-radius:50%;background:var(--accent);flex-shrink:0}
+@keyframes ticker{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+/* PRODUCTS */
+.products-intro{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:56px;gap:32px}
+.products-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px}
+.prod-card{background:var(--white);border:1px solid var(--gray-200);padding:40px 36px 36px;display:flex;flex-direction:column;transition:border-color .3s}
+.prod-card:hover{border-color:var(--gray-500)}
+.prod-card.featured{background:var(--black);border-color:var(--black);color:var(--white)}
+.prod-tag-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:28px}
+.prod-tag{font-size:9px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--gray-500)}
+.prod-card.featured .prod-tag{color:var(--gray-300)}
+.prod-badge{font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:3px 8px;background:var(--accent);color:var(--white)}
+.prod-model{font-family:var(--font-display);font-size:56px;line-height:1;letter-spacing:.03em;margin-bottom:6px;color:var(--black)}
+.prod-card.featured .prod-model{color:var(--white)}
+.prod-cert{font-size:11px;font-weight:700;letter-spacing:.08em;color:var(--accent);margin-bottom:28px}
+.prod-visual{height:120px;background:#e5e7eb;margin-bottom:28px;display:flex;align-items:center;justify-content:center}
+.prod-card.featured .prod-visual{background:#2a2a2a}
+.prod-visual-label{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--gray-500)}
+.prod-card.featured .prod-visual-label{color:var(--gray-600)}
+.prod-features{list-style:none;display:flex;flex-direction:column;gap:10px;margin-bottom:28px;flex:1}
+.prod-feature{display:flex;align-items:flex-start;gap:10px;font-size:13px;font-weight:300;color:var(--gray-500);line-height:1.4}
+.prod-card.featured .prod-feature{color:var(--gray-300)}
+.prod-feature::before{content:'✓';font-size:11px;font-weight:700;color:var(--accent);margin-top:1px;flex-shrink:0}
+.prod-ideal{font-size:11px;color:var(--gray-500);border-top:1px solid var(--gray-200);padding-top:20px;margin-bottom:20px}
+.prod-card.featured .prod-ideal{border-color:var(--gray-800)}
+.prod-ideal strong{font-weight:700;color:var(--black);display:block;margin-bottom:4px}
+.prod-card.featured .prod-ideal strong{color:var(--gray-300)}
+.prod-cta{display:block;text-align:center;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:12px;text-decoration:none;transition:background .2s,color .2s;border:1px solid var(--gray-200);color:var(--black)}
+.prod-card.featured .prod-cta{background:var(--white);color:var(--black);border-color:var(--white)}
+.prod-cta:hover{background:var(--black);color:var(--white);border-color:var(--black)}
+/* PROCESS */
+.process-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin-top:56px;position:relative}
+.process-grid::before{content:'';position:absolute;top:28px;left:calc(12.5% + 20px);right:calc(12.5% + 20px);height:1px;background:var(--gray-200);z-index:0}
+.process-step{padding:0 24px;text-align:center;position:relative;z-index:1}
+.process-dot{width:56px;height:56px;border-radius:50%;background:var(--black);color:var(--white);display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-size:22px;margin:0 auto 24px}
+.process-title{font-family:var(--font-display);font-size:20px;letter-spacing:.04em;color:var(--black);margin-bottom:10px}
+.process-body{font-size:13px;font-weight:300;color:var(--gray-500);line-height:1.6}
+/* SEGMENTS */
+.segments-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;margin-top:56px}
+.seg-card{background:var(--white);border:1px solid var(--gray-200);padding:48px 40px;transition:border-color .3s}
+.seg-card:hover{border-color:var(--black)}
+.seg-icon{width:48px;height:48px;background:var(--black);margin-bottom:28px;display:flex;align-items:center;justify-content:center}
+.seg-icon svg{width:22px;height:22px;fill:none;stroke:var(--white);stroke-width:1.5}
+.seg-title{font-family:var(--font-display);font-size:26px;letter-spacing:.03em;color:var(--black);margin-bottom:12px;line-height:1.1}
+.seg-body{font-size:13px;font-weight:300;color:var(--gray-500);line-height:1.7}
+.seg-ex{font-size:11px;color:var(--accent);font-weight:700;margin-top:12px;letter-spacing:.04em}
+.seg-link{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--black);text-decoration:none;margin-top:24px}
+/* TESTIMONIALS */
+.test-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;margin-top:56px}
+.test-card{background:var(--offwhite);border:1px solid var(--gray-200);padding:40px 36px}
+.test-stars{display:flex;gap:3px;margin-bottom:20px}
+.test-star{width:14px;height:14px;background:#f59e0b;clip-path:polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%)}
+.test-quote{font-size:14px;font-weight:300;color:var(--gray-700);line-height:1.75;margin-bottom:24px;font-style:italic}
+.test-divider{height:1px;background:var(--gray-200);margin-bottom:20px}
+.test-author{font-size:12px;font-weight:700;letter-spacing:.06em;color:var(--black);text-transform:uppercase}
+.test-role{font-size:11px;color:var(--gray-500);margin-top:3px}
+/* COVERAGE */
+.section-wrap-dark{padding:100px 48px;background:var(--black);color:var(--white)}
+.coverage-layout{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center}
+.coverage-body{font-size:14px;font-weight:300;color:var(--gray-500);line-height:1.8;margin-bottom:36px}
+.zone-pills{display:flex;flex-wrap:wrap;gap:8px;margin-top:24px}
+.zone-pill{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;border:1px solid var(--gray-700);color:var(--gray-300);padding:6px 14px}
+/* CERTS */
+.cert-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;margin-top:56px}
+.cert-card{background:var(--white);border:1px solid var(--gray-200);padding:40px 32px;transition:border-color .3s}
+.cert-card:hover{border-color:var(--black)}
+.cert-card.highlighted{background:var(--black);border-color:var(--black);color:var(--white)}
+.cert-icon-wrap{width:52px;height:52px;background:var(--gray-100);display:flex;align-items:center;justify-content:center;margin-bottom:24px;font-size:22px}
+.cert-card.highlighted .cert-icon-wrap{background:var(--gray-800)}
+.cert-card-title{font-family:var(--font-display);font-size:20px;letter-spacing:.04em;color:var(--black);margin-bottom:8px}
+.cert-card.highlighted .cert-card-title{color:var(--white)}
+.cert-card-body{font-size:12px;font-weight:300;color:var(--gray-500);line-height:1.65}
+/* FINAL CTA */
+#final-cta{background:var(--black);padding:120px 48px;text-align:center;position:relative;overflow:hidden}
+.final-cta-bg{position:absolute;inset:0;background:radial-gradient(ellipse 60% 60% at 50% 100%,rgba(36,183,219,.07),transparent);pointer-events:none}
+.final-cta-label{font-size:10px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:24px;position:relative}
+.final-cta-title{font-family:var(--font-display);font-size:clamp(48px,7vw,100px);line-height:.95;letter-spacing:.01em;color:var(--white);margin-bottom:48px;position:relative}
+.final-cta-actions{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;position:relative}
+.btn-white{font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;background:var(--white);color:var(--black);padding:16px 32px;text-decoration:none;display:inline-block;transition:background .2s}
+.btn-white:hover{background:var(--gray-200)}
+.btn-outline-white{font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;background:transparent;color:var(--white);border:1px solid var(--gray-700);padding:16px 32px;text-decoration:none;display:inline-flex;align-items:center;gap:8px;transition:border-color .2s}
+.btn-outline-white:hover{border-color:var(--white)}
+/* FOOTER */
+footer{background:var(--gray-900);border-top:1px solid var(--gray-800);padding:64px 48px 32px}
+.footer-top{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:48px;margin-bottom:48px}
+.footer-logo{font-family:var(--font-display);font-size:20px;letter-spacing:.06em;text-decoration:none;display:block;margin-bottom:14px}
+.footer-logo .logo-h{color:var(--white)}
+.footer-logo .logo-s{color:var(--gray-500)}
+.footer-desc{font-size:12px;font-weight:300;color:var(--gray-500);line-height:1.7;margin-bottom:20px;max-width:220px}
+.footer-social{display:flex;gap:12px}
+.footer-social a{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--gray-600);text-decoration:none;transition:color .2s}
+.footer-social a:hover{color:var(--white)}
+.footer-col-title{font-size:10px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--white);margin-bottom:18px}
+.footer-col-links{list-style:none;display:flex;flex-direction:column;gap:10px}
+.footer-col-links a{font-size:12px;font-weight:300;color:var(--gray-500);text-decoration:none;transition:color .2s}
+.footer-col-links a:hover{color:var(--white)}
+.footer-bottom{border-top:1px solid var(--gray-800);padding-top:24px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px}
+.footer-copy{font-size:11px;color:var(--gray-600)}
+/* WA FLOAT */
+.wa-float{position:fixed;bottom:24px;right:24px;width:52px;height:52px;background:#25D366;border-radius:50%;display:flex;align-items:center;justify-content:center;z-index:999;box-shadow:0 4px 16px rgba(0,0,0,.3);transition:transform .2s;text-decoration:none}
+.wa-float:hover{transform:scale(1.08)}
+/* HERO */
+#hero{background:var(--black);background-image:linear-gradient(to right,rgba(10,10,10,0.80) 40%,rgba(10,10,10,0.30) 100%),url('https://hurricanesolution.com/wp-content/uploads/2026/05/hs-residencial-hero.jpg');background-size:85%;background-repeat:no-repeat;background-position:0% 0%;display:flex;flex-direction:column;min-height:calc(100vh - 96px);position:relative;overflow:hidden}
+#storm-canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:1}
+.hero-top{display:grid;grid-template-columns:1fr 420px;flex:1;align-items:stretch}
+.hero-left{padding:70px 56px 60px 48px;display:flex;flex-direction:column;justify-content:center;position:relative;z-index:2}
+.hero-eyebrow{font-size:11px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);margin-bottom:24px;display:flex;align-items:center;gap:10px}
+.hero-eyebrow::before{content:'';display:block;width:32px;height:1px;background:var(--accent)}
+.hero-headline{font-family:var(--font-display);font-size:clamp(44px,5.5vw,76px);line-height:1;letter-spacing:.01em;color:var(--white);margin-bottom:24px;max-width:640px}
+.hero-headline em{font-style:normal;color:var(--accent)}
+.hero-sub{font-size:15px;font-weight:300;color:var(--gray-300);line-height:1.75;max-width:520px;margin-bottom:0}
+.hero-sub strong{color:var(--white);font-weight:700}
+.hero-right{background:var(--gray-900);border-left:1px solid var(--gray-800);padding:40px;display:flex;flex-direction:column;justify-content:center;position:relative;z-index:2}
+.form-title{font-family:var(--font-display);font-size:24px;letter-spacing:.04em;color:var(--white);margin-bottom:4px}
+.form-sub{font-size:12px;color:var(--gray-500);margin-bottom:24px;line-height:1.5}
+.frow{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.fg{display:flex;flex-direction:column;gap:5px;margin-bottom:10px}
+.fg label{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--gray-500)}
+.fg input,.fg select{background:var(--gray-800);border:1px solid var(--gray-700);color:var(--white);font-family:var(--font-body);font-size:13px;padding:10px 12px;outline:none;transition:border-color .2s;appearance:none;-webkit-appearance:none;width:100%}
+.fg input::placeholder{color:var(--gray-600)}
+.fg input:focus,.fg select:focus{border-color:var(--accent)}
+.fg select{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' fill='none'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%236b7280' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:32px}
+.fg select option{background:var(--gray-800)}
+.fsub{width:100%;background:var(--white);color:var(--black);font-family:var(--font-body);font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:14px;border:none;cursor:pointer;margin-top:8px;transition:background .2s}
+.fsub:hover{background:var(--gray-200)}
+.fnote{font-size:10px;color:var(--gray-600);text-align:center;margin-top:10px}
+.hero-stats-bar{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--gray-800);background:var(--black);position:relative;z-index:2}
+.hstat{padding:28px 48px;border-right:1px solid var(--gray-800)}
+.hstat:last-child{border-right:none}
+.hero-stat-num{font-family:var(--font-display);font-size:48px;line-height:1;color:var(--white);letter-spacing:.02em}
+.hero-stat-num sup{font-size:.5em;color:var(--accent)}
+.hero-stat-label{font-size:11px;font-weight:400;color:var(--gray-500);letter-spacing:.04em;line-height:1.4;margin-top:6px}
+/* REVEAL */
+.reveal{opacity:0;transform:translateY(20px);transition:opacity .65s ease,transform .65s ease}
+.reveal.visible{opacity:1;transform:translateY(0)}
+/* INNER PAGE HERO */
+.ip-hero{background:var(--black);padding:100px 48px 80px;position:relative;overflow:hidden}
+.ip-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 80% at 30% 50%,rgba(36,183,219,.06),transparent);pointer-events:none}
+.ip-hero-inner{max-width:760px;position:relative;z-index:1}
+.ip-hero .section-label{color:var(--gray-600)}
+.ip-hero .section-label::before{background:var(--gray-600)}
+.ip-hero-title{font-family:var(--font-display);font-size:clamp(42px,6vw,80px);line-height:1;letter-spacing:.02em;color:var(--white);margin-bottom:20px}
+.ip-hero-title em{font-style:normal;color:var(--accent)}
+.ip-hero-sub{font-size:16px;font-weight:300;color:var(--gray-300);line-height:1.75;max-width:580px;margin-bottom:36px}
+.ip-hero-btns{display:flex;gap:12px;flex-wrap:wrap}
+/* BENEFITS */
+.ben-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;margin-top:56px}
+.ben-card{background:var(--offwhite);border:1px solid var(--gray-200);padding:48px 40px;transition:border-color .3s,background .3s}
+.ben-card:hover{border-color:var(--black);background:var(--white)}
+.ben-icon{font-size:28px;margin-bottom:20px;display:block}
+.ben-title{font-family:var(--font-display);font-size:22px;letter-spacing:.04em;color:var(--black);margin-bottom:12px}
+.ben-body{font-size:13px;font-weight:300;color:var(--gray-500);line-height:1.75}
+/* PROBLEM SPLIT */
+.prob-split{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:start}
+.btn-black{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;background:var(--black);color:var(--white);padding:14px 28px;text-decoration:none;transition:background .2s}
+.btn-black:hover{background:var(--gray-800)}
+.prob-box{background:var(--white);border:1px solid var(--gray-200);padding:40px 36px}
+.prob-box-header{display:flex;align-items:flex-start;gap:14px;margin-bottom:14px}
+.prob-alert{width:32px;height:32px;background:var(--black);color:var(--white);font-family:var(--font-display);font-size:18px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px}
+.prob-box-title{font-family:var(--font-display);font-size:20px;letter-spacing:.04em;color:var(--black);line-height:1.1}
+.prob-box-sub{font-size:12px;font-weight:300;color:var(--gray-500);margin-bottom:24px;line-height:1.6}
+.prob-list{list-style:none;display:flex;flex-direction:column;gap:12px}
+.prob-list li{font-size:13px;font-weight:300;color:var(--gray-700);padding-left:20px;position:relative;line-height:1.5}
+.prob-list li::before{content:'?';position:absolute;left:0;font-size:11px;font-weight:700;color:var(--accent)}
+/* CASE STUDY */
+.cs-layout{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center}
+.cs-stats{display:grid;grid-template-columns:1fr;gap:2px}
+.cs-stat{background:rgba(255,255,255,.04);border:1px solid var(--gray-800);padding:40px 36px}
+.cs-num{font-family:var(--font-display);font-size:clamp(56px,7vw,80px);line-height:1;color:var(--white);letter-spacing:-.01em;margin-bottom:8px}
+.cs-label{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--gray-500)}
+/* RESPONSIVE */
+@media(max-width:1024px){
+  .hero-top{grid-template-columns:1fr}
+  .hero-right{border-left:none;border-top:1px solid var(--gray-800)}
+  .coverage-layout{grid-template-columns:1fr}
+  .footer-top{grid-template-columns:1fr 1fr}
+  .prob-split{grid-template-columns:1fr;gap:40px}
+  .cs-layout{grid-template-columns:1fr;gap:40px}
+  .cs-stats{grid-template-columns:repeat(3,1fr)}
+}
+@media(max-width:768px){
+  .topbar{padding:8px 16px}
+  .tb-hide{display:none!important}
+  .topbar-tel-num{display:none}
+  nav{padding:0 16px}
+  .nav-links{display:none}
+  .nav-cta{display:none!important}
+  .nav-burger{display:flex}
+  .section-wrap,.section-wrap-dark{padding:64px 20px}
+  .ip-hero{padding:72px 20px 56px}
+  .ip-hero-btns{flex-direction:column}
+  .ip-hero-btns a{text-align:center}
+  #trust-bar{padding:0 20px}
+  .trust-inner{flex-wrap:wrap}
+  .trust-badge{flex:0 0 50%;border-right:none}
+  .why-grid,.products-grid,.segments-grid,.test-grid,.cert-grid,.ben-grid{grid-template-columns:1fr}
+  .why-header{grid-template-columns:1fr}
+  .process-grid{grid-template-columns:1fr 1fr}
+  .process-grid::before{display:none}
+  .stats-band-grid{grid-template-columns:1fr 1fr}
+  .footer-top{grid-template-columns:1fr}
+  #final-cta{padding:80px 20px}
+  footer{padding:48px 20px 24px}
+  #stats-band{padding:64px 20px 0}
+  .hero-left{padding:48px 20px 40px}
+  .hero-right{padding:32px 20px}
+  .hstat{padding:20px 24px}
+  .hero-stats-bar{grid-template-columns:repeat(3,1fr)}
+  .final-cta-actions{flex-direction:column;align-items:center}
+  .cs-stats{grid-template-columns:1fr}
+  .prob-split,.cs-layout{grid-template-columns:1fr;gap:32px}
+}
+</style>
+
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-left">
+    <a class="topbar-tel" href="tel:+529848035014">
+      <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 8V5z"/></svg>
+      <span class="topbar-tel-num">984 803 5014</span>
+    </a>
+    <a class="topbar-wa" href="https://wa.me/5219987052145" target="_blank" rel="noopener">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.127.558 4.122 1.532 5.849L0 24l6.335-1.652A11.952 11.952 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.814 9.814 0 01-5.016-1.378l-.36-.214-3.732.979.994-3.636-.235-.374A9.818 9.818 0 012.182 12C2.182 6.57 6.57 2.182 12 2.182S21.818 6.57 21.818 12 17.43 21.818 12 21.818z"/></svg>
+      WhatsApp
+    </a>
+  </div>
+  <div class="topbar-right">
+    <a href="https://www.instagram.com/hurricanesolution" target="_blank" rel="noopener" class="tb-hide">Instagram</a>
+    <a href="https://www.facebook.com/share/16cZAdbkjj/" target="_blank" rel="noopener" class="tb-hide">Facebook</a>
+    <a href="https://youtube.com/@hurricanesolution" target="_blank" rel="noopener" class="tb-hide">YouTube</a>
+    <button type="button" class="lang-btn tb-hide">EN</button>
+  </div>
+</div>
+
+
+<nav id="main-nav">
+  <div class="nav-logo">
+    <a href="index.html"><span class="logo-h">Hurricane</span><span class="logo-s">Solution</span></a>
+  </div>
+  <ul class="nav-links">
+    <li><a href="index.html" class="active">Inicio</a></li>
+    <li><a href="hoteles.html">Hotelero</a></li>
+    <li><a href="#">Residencial</a></li>
+    <li><a href="#">Comercial</a></li>
+    <li><a href="#" class="nav-ag">AquaGrid</a></li>
+    <li><a href="#">Rain Protection</a></li>
+    <li><a href="#">El Equipo</a></li>
+    <li><a href="#">FAQ</a></li>
+  </ul>
+  <a href="#" class="nav-cta">Cotizar Ahora</a>
+  <button class="nav-burger" id="nav-burger" aria-label="Abrir menú">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+<div class="nav-drawer" id="nav-drawer">
+  <ul class="nav-drawer-list">
+    <li><a href="index.html">Inicio</a></li>
+    <li><a href="hoteles.html">Hotelero</a></li>
+    <li><a href="#">Residencial</a></li>
+    <li><a href="#">Comercial</a></li>
+    <li><a href="#" class="nav-ag">AquaGrid</a></li>
+    <li><a href="#">Rain Protection</a></li>
+    <li><a href="#">El Equipo</a></li>
+    <li><a href="#">FAQ</a></li>
+  </ul>
+  <a href="#" class="nav-drawer-cta">Cotizar Ahora</a>
+</div>
+<div class="nav-drawer-overlay" id="nav-drawer-overlay"></div>
+
+
+<section id="hero">
+  <canvas id="storm-canvas"></canvas>
+  <div class="hero-top">
+    <div class="hero-left">
+      <div class="hero-eyebrow">Riviera Maya · Los Cabos · Vallarta · Mazatlán · Acapulco</div>
+      <h1 class="hero-headline">El único sistema de protección contra huracanes en México con <em>certificación militar Level E.</em></h1>
+      <p class="hero-sub">Su propiedad tiene <strong>48 horas cuando llega el aviso.</strong> ¿Puede su equipo desplegarlo a tiempo? Desde 2008 protegemos hoteles, empresas y residencias de lujo en las costas de México.</p>
+    </div>
+    <div class="hero-right">
+      <div class="form-title">SOLICITE SU EVALUACIÓN</div>
+      <p class="form-sub">Sin costo · Sin compromiso · Presencial o videollamada</p>
+      <div class="frow">
+        <div class="fg"><label>Nombre</label><input type="text" placeholder="Nombre" /></div>
+        <div class="fg"><label>Apellido</label><input type="text" placeholder="Apellido" /></div>
+      </div>
+      <div class="fg"><label>Teléfono / WhatsApp</label><input type="tel" placeholder="+52 984 000 0000" /></div>
+      <div class="fg"><label>Correo electrónico</label><input type="email" placeholder="correo@empresa.com" /></div>
+      <div class="fg"><label>Tipo de propiedad</label>
+        <select><option value="">Seleccione...</option><option>Hotel / Resort</option><option>Empresa con múltiples ubicaciones</option><option>Residencia de lujo</option><option>Agencia de autos</option><option>Hospital / Clínica</option><option>Desarrollo inmobiliario</option><option>Apertura gran escala (AquaGrid)</option><option>Otro</option></select>
+      </div>
+      <div class="fg"><label>Zona</label>
+        <select><option value="">¿Dónde está su propiedad?</option><option>Riviera Maya / Playa del Carmen</option><option>Cancún</option><option>Cozumel</option><option>Los Cabos</option><option>Puerto Vallarta</option><option>Mazatlán</option><option>Acapulco</option><option>Otra</option></select>
+      </div>
+      <button class="fsub">Solicitar evaluación gratuita →</button>
+      <p class="fnote">Le contactamos en menos de 24 horas.</p>
+    </div>
+  </div>
+  <div class="hero-stats-bar">
+    <div class="hstat"><div class="hero-stat-num">30<sup>+</sup></div><div class="hero-stat-label">Tormentas superadas</div></div>
+    <div class="hstat"><div class="hero-stat-num">Cat<sup>5</sup></div><div class="hero-stat-label">Nivel máximo probado</div></div>
+    <div class="hstat"><div class="hero-stat-num">0</div><div class="hero-stat-label">Fallas en inst. correctas</div></div>
+  </div>
+</section>
+
+<div id="trust-bar">
+  <div class="trust-inner">
+    <div class="trust-badge"><div class="trust-badge-icon">★</div><div><div class="trust-badge-title">Único Level E en México</div><div class="trust-badge-sub">Certificación militar exclusiva</div></div></div>
+    <div class="trust-badge"><div class="trust-badge-icon">✓</div><div><div class="trust-badge-title">Miami-Dade Aprobado</div><div class="trust-badge-sub">NOA certificación</div></div></div>
+    <div class="trust-badge"><div class="trust-badge-icon">M</div><div><div class="trust-badge-title">Único miembro IHPA en México</div><div class="trust-badge-sub">International Hurricane Protection Assoc.</div></div></div>
+    <div class="trust-badge"><div class="trust-badge-icon">P</div><div><div class="trust-badge-title">Sistema Patentado</div><div class="trust-badge-sub">Tecnología propietaria registrada</div></div></div>
+    <div class="trust-badge"><div class="trust-badge-icon">G</div><div><div class="trust-badge-title">Garantía hasta 10 años</div><div class="trust-badge-sub">En modelo HS-1500</div></div></div>
+  </div>
+</div>
+
+<section class="section-wrap">
+  <div class="why-header reveal">
+    <div><div class="section-label">Por qué Hurricane Solution</div><h2 class="section-title">SOMOS LOS EXPERTOS.<br>NO HAY SEGUNDO LUGAR.</h2></div>
+    <p class="section-body">En protección contra huracanes, la diferencia entre un sistema que funciona y uno que falla puede ser semanas de cierre y millones en daños.</p>
+  </div>
+  <div class="why-grid">
+    <div class="why-card reveal"><div class="why-num">01</div><div class="why-title">EL ÚNICO LEVEL E EN MÉXICO</div><p class="why-body">Miami-Dade y Florida Building Code prueban viento, agua, proyectiles y presión barométrica — pero por separado. Level E los prueba todos al mismo tiempo. Somos los únicos en México con esta certificación.</p></div>
+    <div class="why-card reveal" style="transition-delay:.1s"><div class="why-num">02</div><div class="why-title">FUNCIONA. SIEMPRE.</div><p class="why-body">Más de 30 tormentas hasta Categoría 5. Cero fallas en instalaciones correctamente ejecutadas. Las únicas fallas documentadas ocurren cuando la estructura cede antes que el sistema.</p></div>
+    <div class="why-card reveal" style="transition-delay:.05s"><div class="why-num">03</div><div class="why-title">SE PUEDE DESPLEGAR A TIEMPO</div><p class="why-body">Un sistema que no puede instalarse antes de la tormenta no es protección. Cada instalación está diseñada para que su propio equipo lo despliegue en horas. Capacitamos a su personal.</p></div>
+    <div class="why-card reveal" style="transition-delay:.15s"><div class="why-num">04</div><div class="why-title">INGENIERÍA REAL, NO SOLO VENTAS</div><p class="why-body">Somos una empresa de construcción. La fachada de 14 metros sin solución — la creamos. El hotel de 2,500 habitaciones en un día — lo logramos.</p></div>
+  </div>
+</section>
+
+<div id="stats-band">
+  <div class="stats-band-grid reveal">
+    <div class="band-stat"><div class="band-stat-num">30<sup>+</sup></div><div class="band-stat-label">Tormentas superadas</div></div>
+    <div class="band-stat"><div class="band-stat-num">Cat<sup>5</sup></div><div class="band-stat-label">Nivel máximo probado</div></div>
+    <div class="band-stat"><div class="band-stat-num">2008</div><div class="band-stat-label">Operando en México</div></div>
+    <div class="band-stat"><div class="band-stat-num">10<sup>yr</sup></div><div class="band-stat-label">Garantía escrita</div></div>
+  </div>
+  <div class="ticker-wrap"><div class="ticker-track" id="ticker-track"></div></div>
+</div>
+
+<section class="section-wrap" style="background:var(--offwhite)">
+  <div class="products-intro reveal">
+    <div><div class="section-label">Nuestros sistemas</div><h2 class="section-title">LA PROTECCIÓN CORRECTA<br>PARA CADA PROPIEDAD.</h2></div>
+    <p class="section-body" style="text-align:right;max-width:320px">Tres sistemas. Todos fabricados en EUA. Somos honestos sobre cuál necesita su propiedad.</p>
+  </div>
+  <div class="products-grid">
+    <div class="prod-card featured reveal">
+      <div class="prod-tag-row"><span class="prod-tag">Sistema Insignia</span><span class="prod-badge">Level E · Militar</span></div>
+      <div class="prod-model">HS-1500</div>
+      <div class="prod-cert">Certificación Militar Level E · Categoría 5</div>
+      <div class="prod-visual"><span class="prod-visual-label">Imagen próximamente</span></div>
+      <ul class="prod-features">
+        <li class="prod-feature">Tela balística — el mismo material del airbag de su automóvil</li>
+        <li class="prod-feature">Más de 1,500 psi (Cat 5 = 1,200 psi)</li>
+        <li class="prod-feature">Certificación Level E — Instalaciones Esenciales</li>
+        <li class="prod-feature">Miami-Dade NOA y Florida Building Code</li>
+        <li class="prod-feature">Anclaje flexible patentado — 8 puntos · Garantía 10 años</li>
+      </ul>
+      <div class="prod-ideal"><strong>Ideal para:</strong> Hoteles de playa, edificios corporativos, primera línea.</div>
+      <a class="prod-cta" href="#">Cotizar HS-1500</a>
+    </div>
+    <div class="prod-card reveal" style="transition-delay:.1s">
+      <div class="prod-tag-row"><span class="prod-tag">Cat 5 · Disponible en blanco</span><span class="prod-badge">Cat 5</span></div>
+      <div class="prod-model">HS-1250</div>
+      <div class="prod-cert">Certificación Cat 5 · Translúcido</div>
+      <div class="prod-visual"><span class="prod-visual-label">Imagen próximamente</span></div>
+      <ul class="prod-features">
+        <li class="prod-feature">Resistencia Cat 5 certificada</li>
+        <li class="prod-feature">Disponible en blanco — sin degradación UV</li>
+        <li class="prod-feature">Translúcido — visibilidad durante la tormenta</li>
+        <li class="prod-feature">Miami-Dade Aprobado</li>
+        <li class="prod-feature">Anclaje flexible patentado · Garantía 7 años</li>
+      </ul>
+      <div class="prod-ideal"><strong>Ideal para:</strong> Hoteles modernos, condominios, propiedades de diseño.</div>
+      <a class="prod-cta" href="#">Cotizar HS-1250</a>
+    </div>
+    <div class="prod-card reveal" style="transition-delay:.2s">
+      <div class="prod-tag-row"><span class="prod-tag">Residencial · Presupuesto controlado</span><span class="prod-badge">Cat 3</span></div>
+      <div class="prod-model">HS-875</div>
+      <div class="prod-cert">Certificación Cat 3 · Polipropileno</div>
+      <div class="prod-visual"><span class="prod-visual-label">Imagen próximamente</span></div>
+      <ul class="prod-features">
+        <li class="prod-feature">Resistencia hasta 875 psi</li>
+        <li class="prod-feature">Certificación Categoría 3</li>
+        <li class="prod-feature">Translúcido — visibilidad durante la tormenta</li>
+        <li class="prod-feature">Florida Building Code Aprobado</li>
+        <li class="prod-feature">Anclaje flexible patentado · Garantía 5 años</li>
+      </ul>
+      <div class="prod-ideal"><strong>Ideal para:</strong> Residencias a 3+ km de la costa, presupuesto controlado.</div>
+      <a class="prod-cta" href="#">Cotizar HS-875</a>
+    </div>
+  </div>
+</section>
+
+<section class="section-wrap">
+  <div class="reveal" style="text-align:center;max-width:600px;margin:0 auto">
+    <div class="section-label" style="justify-content:center">Cómo Trabajamos</div>
+    <h2 class="section-title">SIMPLE. SIN SORPRESAS.</h2>
+    <p class="section-body" style="max-width:100%;margin-top:.5rem">Hacemos lo que decimos, cuando lo decimos.</p>
+  </div>
+  <div class="process-grid reveal">
+    <div class="process-step"><div class="process-dot">1</div><div class="process-title">EVALUACIÓN GRATUITA</div><p class="process-body">Visitamos su propiedad o videollamada. Sin costo, sin compromiso.</p></div>
+    <div class="process-step"><div class="process-dot">2</div><div class="process-title">PROPUESTA DE INGENIERÍA</div><p class="process-body">Plan específico. Sin venderle más de lo necesario.</p></div>
+    <div class="process-step"><div class="process-dot">3</div><div class="process-title">INSTALACIÓN CERTIFICADA</div><p class="process-body">Nuestro equipo. Cada pantalla a medida. Fechas respetadas.</p></div>
+    <div class="process-step"><div class="process-dot">4</div><div class="process-title">CAPACITACIÓN Y MANUAL</div><p class="process-body">Capacitamos a su personal. Manual escrito para la próxima tormenta.</p></div>
+  </div>
+</section>
+
+<section class="section-wrap" style="background:var(--offwhite)">
+  <div class="reveal"><div class="section-label">A quién servimos</div><h2 class="section-title">TRES TIPOS DE CLIENTE.<br>UN MISMO ESTÁNDAR.</h2></div>
+  <div class="segments-grid">
+    <div class="seg-card reveal">
+      <div class="seg-icon"><svg viewBox="0 0 24 24"><rect x="3" y="10" width="18" height="11"/><path d="M3 10l9-7 9 7"/><path d="M9 21V14h6v7"/></svg></div>
+      <div class="seg-title">HOTELES Y RESORTS</div>
+      <p class="seg-body">Grandes propiedades con cientos o miles de habitaciones. Despliegue masivo en horas con su propio personal.</p>
+      <div class="seg-ex">Vidanta · Barceló · Iberostar · Marriott</div>
+      <a class="seg-link" href="hoteles.html">Conocer más →</a>
+    </div>
+    <div class="seg-card reveal" style="transition-delay:.1s">
+      <div class="seg-icon"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16"/><path d="M9 4v16M15 4v16M4 9h16M4 15h16"/></svg></div>
+      <div class="seg-title">EMPRESAS MULTI-UBICACIÓN</div>
+      <p class="seg-body">Cadenas con decenas o cientos de sucursales. Programas corporativos estandarizados.</p>
+      <div class="seg-ex">Agencias de autos · Hospitales · Desarrollos</div>
+      <a class="seg-link" href="#">Conocer más →</a>
+    </div>
+    <div class="seg-card reveal" style="transition-delay:.2s">
+      <div class="seg-icon"><svg viewBox="0 0 24 24"><path d="M3 21V8l9-5 9 5v13"/><path d="M9 21v-6h6v6"/><circle cx="12" cy="11" r="1.5"/></svg></div>
+      <div class="seg-title">RESIDENCIAS DE LUJO</div>
+      <p class="seg-body">Propiedades de alto valor donde la estética importa tanto como la protección.</p>
+      <div class="seg-ex">Villas · Penthouses · Frente al mar</div>
+      <a class="seg-link" href="#">Conocer más →</a>
+    </div>
+  </div>
+</section>
+
+<section class="section-wrap">
+  <div class="reveal"><div class="section-label">Lo que dicen nuestros clientes</div><h2 class="section-title">RESULTADOS REALES.<br>PROPIEDADES REALES.</h2></div>
+  <div class="test-grid">
+    <div class="test-card reveal"><div class="test-stars"><div class="test-star"></div><div class="test-star"></div><div class="test-star"></div><div class="test-star"></div><div class="test-star"></div></div><p class="test-quote">"Cuando Delta tocó tierra en Puerto Morelos en 2020, nuestro hotel estaba completamente protegido. Nuestros vecinos tardaron semanas en reabrir. Nosotros abrimos al tercer día."</p><div class="test-divider"></div><div class="test-author">Director de Operaciones</div><div class="test-role">Hotel, Puerto Morelos, Q. Roo</div></div>
+    <div class="test-card reveal" style="transition-delay:.1s"><div class="test-stars"><div class="test-star"></div><div class="test-star"></div><div class="test-star"></div><div class="test-star"></div><div class="test-star"></div></div><p class="test-quote">"Teníamos una fachada de vidrio de 14 metros sin solución en el mercado. Hurricane Solution la diseñó desde cero. No existía el sistema. Lo inventaron para nosotros."</p><div class="test-divider"></div><div class="test-author">Gerente General</div><div class="test-role">Hotel de lujo, Riviera Maya</div></div>
+    <div class="test-card reveal" style="transition-delay:.2s"><div class="test-stars"><div class="test-star"></div><div class="test-star"></div><div class="test-star"></div><div class="test-star"></div><div class="test-star"></div></div><p class="test-quote">"La instalación fue rápida y profesional. Lo que más nos gustó fue la confianza del especialista al explicarnos todo. Se nota que es un producto serio."</p><div class="test-divider"></div><div class="test-author">Karla L.</div><div class="test-role">Residente, Ciudad Mayakoba</div></div>
+  </div>
+</section>
+
+<section class="section-wrap-dark">
+  <div class="coverage-layout">
+    <div class="reveal">
+      <div class="section-label" style="color:var(--gray-600)">Dónde operamos</div>
+      <h2 class="section-title" style="color:var(--white)">BASADOS EN RIVIERA MAYA.<br>VIAJAMOS A TODA LA COSTA.</h2>
+      <p class="coverage-body">Playa del Carmen es nuestra base. Desde Los Cabos hasta Acapulco, mismo equipo y mismos estándares.</p>
+      <div class="zone-pills">
+        <span class="zone-pill">Riviera Maya</span><span class="zone-pill">Cancún</span><span class="zone-pill">Cozumel</span><span class="zone-pill">Los Cabos</span><span class="zone-pill">Pto. Vallarta</span><span class="zone-pill">Mazatlán</span><span class="zone-pill">Acapulco</span>
+      </div>
+    </div>
+    <div class="reveal" style="transition-delay:.15s">
+      <svg viewBox="0 0 500 350" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto">
+        <path d="M30 120 L60 80 L110 60 L160 55 L210 58 L250 50 L290 55 L330 60 L370 70 L410 90 L440 110 L460 140 L470 170 L460 200 L440 220 L420 235 L400 240 L380 250 L360 260 L340 265 L320 260 L310 270 L300 285 L290 300 L280 310 L270 305 L260 295 L255 280 L260 265 L255 255 L240 248 L230 252 L220 248 L218 240 L225 232 L230 220 L225 210 L215 205 L200 200 L185 190 L175 180 L170 170 L160 175 L150 185 L140 190 L130 188 L120 180 L110 170 L100 160 L90 150 L70 140 L50 132 Z" fill="#1c1c1c" stroke="#2a2a2a" stroke-width="1.5"/>
+        <path d="M60 80 L50 100 L42 130 L38 160 L40 190 L44 210 L50 230 L52 240 L50 250 L48 260 L46 270 L50 275 L54 265 L58 250 L60 235 L62 220 L65 205 L68 190 L70 175 L72 160 L72 145 L68 130 L65 115 L68 105 L72 95 L78 88 L72 85 Z" fill="#1c1c1c" stroke="#2a2a2a" stroke-width="1.5"/>
+        <circle cx="430" cy="210" r="5" fill="#24b7db" opacity="0.9"><animate attributeName="r" values="5;9;5" dur="2.4s" repeatCount="indefinite"/><animate attributeName="opacity" values="0.9;0.4;0.9" dur="2.4s" repeatCount="indefinite"/></circle>
+        <circle cx="445" cy="225" r="4" fill="#24b7db" opacity="0.8"><animate attributeName="r" values="4;7;4" dur="2.4s" begin="0.4s" repeatCount="indefinite"/></circle>
+        <circle cx="50" cy="245" r="5" fill="#24b7db" opacity="0.9"><animate attributeName="r" values="5;9;5" dur="2.4s" begin="0.8s" repeatCount="indefinite"/></circle>
+        <circle cx="165" cy="165" r="4" fill="#24b7db" opacity="0.8"><animate attributeName="r" values="4;7;4" dur="2.4s" begin="1.2s" repeatCount="indefinite"/></circle>
+        <circle cx="185" cy="185" r="4" fill="#24b7db" opacity="0.7"><animate attributeName="r" values="4;7;4" dur="2.4s" begin="1.6s" repeatCount="indefinite"/></circle>
+        <text x="432" y="205" fill="#6b7280" font-size="8" font-family="Lato,sans-serif" letter-spacing="0.5">CANCÚN</text>
+        <text x="30" y="242" fill="#6b7280" font-size="8" font-family="Lato,sans-serif" letter-spacing="0.5">LOS CABOS</text>
+        <text x="190" y="183" fill="#6b7280" font-size="8" font-family="Lato,sans-serif" letter-spacing="0.5">VALLARTA</text>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<section class="section-wrap">
+  <div class="reveal" style="max-width:600px"><div class="section-label">Certificaciones</div><h2 class="section-title">LOS PAPELES RESPALDAN<br>LO QUE EL HURACÁN CONFIRMA.</h2></div>
+  <div class="cert-grid">
+    <div class="cert-card highlighted reveal"><div class="cert-icon-wrap">★</div><div class="cert-card-title">LEVEL E MILITAR</div><p class="cert-card-body">Certificación militar de EUA. La única que prueba las 4 fuerzas simultáneamente. Somos los únicos en México.</p></div>
+    <div class="cert-card reveal" style="transition-delay:.1s"><div class="cert-icon-wrap">✓</div><div class="cert-card-title">MIAMI-DADE NOA</div><p class="cert-card-body">Notice of Acceptance del condado con la normativa de huracanes más exigente de EUA.</p></div>
+    <div class="cert-card reveal" style="transition-delay:.2s"><div class="cert-icon-wrap">◈</div><div class="cert-card-title">MIEMBRO IHPA</div><p class="cert-card-body">Únicos miembros de la International Hurricane Protection Association fuera de los Estados Unidos.</p></div>
+    <div class="cert-card reveal" style="transition-delay:.3s"><div class="cert-icon-wrap">⊕</div><div class="cert-card-title">FLORIDA BUILDING CODE</div><p class="cert-card-body">El estándar de referencia internacional para zonas de huracanes. Nuestros tres sistemas cumplen.</p></div>
+  </div>
+</section>
+
+<section id="final-cta">
+  <div class="final-cta-bg"></div>
+  <div class="final-cta-label reveal">¿Cuándo va a proteger su propiedad?</div>
+  <h2 class="final-cta-title reveal">ANTES DE<br>LA TORMENTA.<br>NO DESPUÉS.</h2>
+  <div class="final-cta-actions reveal">
+    <a class="btn-white" href="#">Solicitar evaluación gratuita</a>
+    <a class="btn-outline-white" href="https://wa.me/5219987052145" target="_blank">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.127.558 4.122 1.532 5.849L0 24l6.335-1.652A11.952 11.952 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.814 9.814 0 01-5.016-1.378l-.36-.214-3.732.979.994-3.636-.235-.374A9.818 9.818 0 012.182 12C2.182 6.57 6.57 2.182 12 2.182S21.818 6.57 21.818 12 17.43 21.818 12 21.818z"/></svg>
+      Escribir por WhatsApp
+    </a>
+  </div>
+</section>
+
+
+<footer>
+  <div class="footer-top">
+    <div>
+      <a class="footer-logo" href="index.html"><span class="logo-h">Hurricane</span><span class="logo-s">Solution</span></a>
+      <p class="footer-desc">El único sistema con certificación militar Level E en México. Protegiendo hoteles, empresas y residencias desde 2008.</p>
+      <div class="footer-social">
+        <a href="https://www.instagram.com/hurricanesolution" target="_blank">IG</a>
+        <a href="https://www.facebook.com/share/16cZAdbkjj/" target="_blank">FB</a>
+        <a href="https://youtube.com/@hurricanesolution" target="_blank">YT</a>
+        <a href="https://www.tiktok.com/@hurricane.solutio" target="_blank">TK</a>
+      </div>
+    </div>
+    <div>
+      <div class="footer-col-title">Sistemas</div>
+      <ul class="footer-col-links">
+        <li><a href="hoteles.html">Hotelero</a></li>
+        <li><a href="#">Residencial</a></li>
+        <li><a href="#">Comercial</a></li>
+        <li><a href="#">AquaGrid</a></li>
+        <li><a href="#">Rain Protection</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-title">Empresa</div>
+      <ul class="footer-col-links">
+        <li><a href="#">El Equipo</a></li>
+        <li><a href="#">FAQ</a></li>
+        <li><a href="#">HS-1500</a></li>
+        <li><a href="#">HS-1250</a></li>
+        <li><a href="#">HS-875</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-title">Contacto</div>
+      <ul class="footer-col-links">
+        <li><a href="tel:+529848035014">984 803 5014</a></li>
+        <li><a href="https://wa.me/5219987052145" target="_blank">WhatsApp</a></li>
+        <li><a href="mailto:info@hurricanesolution.com">info@hurricanesolution.com</a></li>
+        <li><a href="#">Cotizar ahora</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span class="footer-copy">© 2025 Hurricane Solution. Todos los derechos reservados.</span>
+    <span class="footer-copy">Playa del Carmen, Quintana Roo, México</span>
+  </div>
+</footer>
+<a class="wa-float" href="https://wa.me/5219987052145" target="_blank" rel="noopener" aria-label="WhatsApp">
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.127.558 4.122 1.532 5.849L0 24l6.335-1.652A11.952 11.952 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.814 9.814 0 01-5.016-1.378l-.36-.214-3.732.979.994-3.636-.235-.374A9.818 9.818 0 012.182 12C2.182 6.57 6.57 2.182 12 2.182S21.818 6.57 21.818 12 17.43 21.818 12 21.818z"/></svg>
+</a>
+
+
+<script>
+  (function(){
+    var canvas=document.getElementById('storm-canvas');
+    if(!canvas)return;
+    var ctx=canvas.getContext('2d'),drops=[],W,H,animId;
+    function resize(){W=canvas.width=canvas.offsetWidth;H=canvas.height=canvas.offsetHeight;}
+    function initDrops(){drops=[];var c=Math.floor(W*0.18);for(var i=0;i<c;i++)drops.push({x:Math.random()*W,y:Math.random()*H,len:Math.random()*28+8,speed:Math.random()*6+4,opacity:Math.random()*0.12+0.03,width:Math.random()*0.6+0.3});}
+    function draw(){
+      ctx.clearRect(0,0,W,H);
+      var v=ctx.createRadialGradient(W/2,H/2,H*0.1,W/2,H/2,H*0.9);
+      v.addColorStop(0,'rgba(10,10,10,0)');v.addColorStop(1,'rgba(10,10,10,0.6)');
+      ctx.fillStyle=v;ctx.fillRect(0,0,W,H);
+      ctx.save();
+      drops.forEach(function(d){
+        ctx.beginPath();ctx.moveTo(d.x,d.y);ctx.lineTo(d.x-d.len*0.18,d.y+d.len);
+        ctx.strokeStyle='rgba(200,198,192,'+d.opacity+')';ctx.lineWidth=d.width;ctx.stroke();
+        d.y+=d.speed;d.x-=d.speed*0.18;
+        if(d.y>H+20){d.y=-d.len;d.x=Math.random()*W+40;}
+      });
+      ctx.restore();
+      animId=requestAnimationFrame(draw);
+    }
+    function init(){resize();initDrops();cancelAnimationFrame(animId);draw();}
+    window.addEventListener('resize',init);init();
+  })();
+</script>
+
+
+<script>
+  // Hamburger
+  (function(){
+    var btn=document.getElementById('nav-burger'),drawer=document.getElementById('nav-drawer'),overlay=document.getElementById('nav-drawer-overlay');
+    if(!btn)return;
+    function open(){drawer.classList.add('is-open');overlay.classList.add('is-show');btn.classList.add('is-active');document.body.style.overflow='hidden';}
+    function close(){drawer.classList.remove('is-open');overlay.classList.remove('is-show');btn.classList.remove('is-active');document.body.style.overflow='';}
+    btn.addEventListener('click',function(){drawer.classList.contains('is-open')?close():open();});
+    overlay.addEventListener('click',close);
+    drawer.querySelectorAll('a').forEach(function(a){a.addEventListener('click',close);});
+  })();
+  // Nav scroll
+  var nav=document.getElementById('main-nav');
+  if(nav)window.addEventListener('scroll',function(){nav.classList.toggle('scrolled',window.scrollY>60);});
+  // Reveal
+  var obs=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target);}});},{threshold:0.08});
+  document.querySelectorAll('.reveal').forEach(function(el){obs.observe(el);});
+  // Ticker
+  var storms=['Delta 2020 — Cat 2, Puerto Morelos','Odile 2014 — Cat 3, Los Cabos','Irma 2017 — Cat 5','Ian 2022 — Cat 4','Michael 2018 — Cat 5','Milton 2024 — Cat 5','Gamma 2020','Franklin 2017','Grace 2021','Nicole 2022','Zeta 2020','Dorian 2019','+ 18 más'];
+  var track=document.getElementById('ticker-track');
+  if(track){var h=storms.concat(storms).map(function(s){return'<span class="ticker-item"><span class="dot"></span>'+s+'</span>';}).join('');track.innerHTML=h;}
+</script>
+
+</body>
+</html>
