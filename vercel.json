@@ -1,0 +1,15 @@
+{
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "rewrites": [
+    { "source": "/hoteles",     "destination": "/pages/hoteles.html" },
+    { "source": "/residencial", "destination": "/pages/residencial.html" },
+    { "source": "/comercial",   "destination": "/pages/comercial.html" },
+    { "source": "/aquagrid",    "destination": "/pages/aquagrid.html" },
+    { "source": "/rain",        "destination": "/pages/rain.html" },
+    { "source": "/equipo",      "destination": "/pages/equipo.html" },
+    { "source": "/faq",         "destination": "/pages/faq.html" },
+    { "source": "/contacto",    "destination": "/pages/contacto.html" },
+    { "source": "/blog",        "destination": "/pages/blog.html" }
+  ]
+}
