@@ -1,25 +1,24 @@
-/**
- * Entry point del JavaScript del navegador.
- * Inicializa reveals (IntersectionObserver), FAQ accordion y, si la página lo
- * tiene, el widget cotizador.
- *
- * Nav: el CSS ya declara position:sticky, no requiere JS por ahora.
- * Menú mobile (hamburguesa) queda pendiente — sin diseño aprobado todavía.
- */
-import { initReveals } from './reveals.js';
-import { initFaq } from './faq.js';
-import { initCotizadorWidget } from './widget.js';
-import { initLeadForms } from './forms.js';
-const boot = () => {
-    initReveals();
-    initFaq();
-    initCotizadorWidget();
-    initLeadForms();
-};
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', boot);
+);
+  setTimeout(initReveals,100);
 }
-else {
-    boot();
+function initReveals(){
+  const obs=new IntersectionObserver((entries)=>{
+    entries.forEach((e,i)=>{if(e.isIntersecting)setTimeout(()=>e.target.classList.add('vis'),i*55);});
+  },{threshold:0.07});
+  document.querySelectorAll('.reveal:not(.vis)').forEach(r=>obs.observe(r));
 }
-//# sourceMappingURL=main.js.map
+initReveals();
+function toggleFaq(btn){
+  const item=btn.parentElement;
+  const isOpen=item.classList.contains('open');
+  document.querySelectorAll('.faq-item').forEach(i=>i.classList.remove('open'));
+  if(!isOpen)item.classList.add('open');
+}
+function submitForm(e,form){
+  e.preventDefault();
+  const btn=form.querySelector('.fsub');
+  btn.textContent='✓ Solicitud enviada — le contactamos pronto';
+  btn.style.background='#2a9d5c';
+  btn.style.color='#fff';
+  btn.disabled=true;
+}
